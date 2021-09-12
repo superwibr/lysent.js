@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/cascadia-code.min.css");
+@import url('http://fonts.cdnfonts.com/css/menlo');
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	background-color: #171717;
+	font-family: 'Share Tech Mono', 'Cascadia Code', 'Menlo', sans-serif;
+	font-size: 25px;
+	color: white;
+}
+
+.loadbar {
+	font-family: monospace;
+}
+
+.percent::after {
+	content:'%'
+}
+
+.spin::after {
+	content:'⠏';
+	color: lightcyan;
+    animation-name: loadSpin;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+}
+@keyframes loadSpin {
+	0%   {content:'⠋'}
+	10%  {content:'⠙'}
+	20%  {content:'⠹'}
+	30%  {content:'⠸'}
+	40%  {content:'⠼'}
+	50%  {content:'⠴'}
+	60%  {content:'⠦'}
+	70%  {content:'⠧'}
+	80%  {content:'⠇'}
+	90%  {content:'⠏'}
+}
+
+.done::after {
+	content:'✓';
+	color: lightgreen;
+}
+
+.fail::after {
+	content: '✗';
+	color: red;
+}
