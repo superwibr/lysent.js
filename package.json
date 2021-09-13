@@ -1,0 +1,20 @@
+{
+  "name": "lysent.js",
+  "version": "0.1.0",
+  "description": "Lysent JS implementation library",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node liveserver.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superwibr/lysent.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/superwibr/lysent.js/issues"
+  },
+  "homepage": "https://github.com/superwibr/lysent.js#readme"
+}

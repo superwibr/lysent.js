@@ -59,10 +59,19 @@ export default {
 			loc.append(progress)
 		}
 		setProgress(percent) {
-			this.progress.children[2].innerText = ` ${percent}`;
+			if (percent = Infinity) percent = 100
+			this.progress.children[2].innerText = ` ${Number(percent)}`;
 			this.percent = percent;
 
-			this.progress.children[0].innerText = this._templates.loadbar[Math.floor(percent/10)];
+			let prcd
+			if(percent <= 100){
+				prcd = Math.floor(percent/10)
+			}else if (percent > 100){
+				prcd = 10
+			}else{
+				prcd = 0
+			}
+			this.progress.children[0].innerText = this._templates.loadbar[prcd];
 		}
 		finish(success) {
 			if(success){
