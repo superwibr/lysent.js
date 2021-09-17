@@ -15,17 +15,17 @@ class Resource {
 			xhr.responseType = 'blob'
 
 			xhr.onprogress = event => { // when progress is made
-				if(!silent) bar.setProgress(Math.floor(event.loaded / event.total) * 100) // make percentage and set progress
+				if (!silent) bar.setProgress(Math.floor(event.loaded / event.total) * 100) // make percentage and set progress
 			};
 
 			let blob
 			xhr.onload = () => {
 				if (xhr.status != 200) {
-					if(!silent) bar.finish(false)
+					if (!silent) bar.finish(false)
 					rej({})
 					console.log(`Error ${xhr.status}: ${xhr.statusText}`);
 				} else {
-					if(!silent) bar.finish(true)
+					if (!silent) bar.finish(true)
 					blob = xhr.response
 					res({
 						data: blob,
@@ -42,8 +42,8 @@ class Resource {
 Resource.assemble = async function (map) {// creates a single document from a map of resources. an example can be found in the /tests folder
 	let backup = window.document.documentElement, // back up the document
 		srcpath = document.querySelector('script[lysent]').src.match(/.*\//)[0], // script path for dynamics
-		loader = await new Resource(`${srcpath}resources/loader.html`, '').fetch(true) // building loader page overlay
-			.then(res=>res.data.text());
+		loader = await new Resource(`${srcpath}resources/loader.html`, '').fetch(1) // building loader page overlay
+			.then(res => res.data.text());
 	loader = loader.replace('{{cdtitle}}', document.title);
 	loader = loader.replace('{{indexpath}}', `${srcpath}lysent.js`);
 	loader = loader.replace('{{stylepath}}', `${srcpath}resources/resource.css`);
@@ -53,20 +53,41 @@ Resource.assemble = async function (map) {// creates a single document from a ma
 	document.open();
 	document.append(loader);
 
-	// load things
-	let things = new Array
-	await map.forEach(async thing => {
-		thing = await thing.fetch()
-		things.push(thing);
-	});
+	// building thing
+	let thing = await this.assemble._requires(map)
 
-	await new Promise(res=>setTimeout(res, 1000)) // wait 1 second
+	await new Promise(res => setTimeout(res, 1000)) // wait 1 second
 
 	// restore the document
 	document.open();
 	document.append(backup);
 
-	return things
+	return new DOMParser().parseFromString(thing, "text/html").documentElement
+}
+Resource.assemble._requires = async function (map) {
+	let main = await map.resource.fetch()
+
+	if (main.data.type.startsWith("text/")) {
+		main = await main.data.text()
+	} else {
+		main = await (new Promise((res, rej) => {
+			let a = new FileReader();
+			a.onload = function (e) { res(e.target.result); }
+			a.readAsDataURL(main.data);
+		}));
+	}
+
+	if (!map.require) return main
+
+	for (const [key, val] of Object.entries(map.require)) {
+		console.log(`filling '${key}'`)
+		main = main.replaceAll(
+			`{{${key}}}`,
+			await Resource.assemble._requires(val)
+		);
+	}
+
+	return main
 }
 
 export default Resource
