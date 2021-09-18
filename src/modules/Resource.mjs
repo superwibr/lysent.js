@@ -56,7 +56,13 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 	// building thing
 	let thing = await this.assemble._requires(map)
 
-	await new Promise(res => setTimeout(res, 1000)) // wait 1 second
+	// built-in features
+	thing = thing.replace(
+		'{{lys-fse}}',
+		await new lysent.Resource(`${srcpath}resources/forcescripts.html`, '').fetch(1).then(res => res.data.text())
+	);// forces inline scripts to run, since appending them doesn't do anythong
+
+	//await new Promise(res => setTimeout(res, 1000)) // wait 1 second
 
 	document.open();
 	if (autoUse) {
