@@ -39,7 +39,7 @@ class Resource {
 		})
 	}
 }
-Resource.assemble = async function (map) {// creates a single document from a map of resources. an example can be found in the /tests folder
+Resource.assemble = async function (map, autoUse) {// creates a single document from a map of resources. an example can be found in the /tests folder
 	let backup = window.document.documentElement, // back up the document
 		srcpath = document.querySelector('script[lysent]').src.match(/.*\//)[0], // script path for dynamics
 		loader = await new Resource(`${srcpath}resources/loader.html`, '').fetch(1) // building loader page overlay
@@ -58,16 +58,23 @@ Resource.assemble = async function (map) {// creates a single document from a ma
 
 	await new Promise(res => setTimeout(res, 1000)) // wait 1 second
 
-	// restore the document
 	document.open();
-	document.append(backup);
+	if (autoUse) {
+		// load constructed document
+		document.append(new DOMParser().parseFromString(thing, "text/html").documentElement)
+	} else {
+		// restore the document
+		document.append(backup);
+	}
 
 	return new DOMParser().parseFromString(thing, "text/html").documentElement
 }
-Resource.assemble._requires = async function (map) {
-	let main = await map.resource.fetch()
 
-	if (main.data.type.startsWith("text/")) {
+
+Resource.assemble._requires = async function (map) { // requires down the tree
+	let main = await map.resource.fetch() // get the main
+
+	if (main.data.type.startsWith("text/")) { // interpret as text or binary data.
 		main = await main.data.text()
 	} else {
 		main = await (new Promise((res, rej) => {
