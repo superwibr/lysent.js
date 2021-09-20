@@ -68,6 +68,9 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 	if (autoUse) {
 		// load constructed document
 		document.append(new DOMParser().parseFromString(thing, "text/html").documentElement)
+
+		// force script execution
+		for(let script of document.scripts)(0, eval)(script.textContent) 
 	} else {
 		// restore the document
 		document.append(backup);
