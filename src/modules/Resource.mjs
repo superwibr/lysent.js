@@ -41,7 +41,7 @@ class Resource {
 }
 Resource.assemble = async function (map, autoUse) {// creates a single document from a map of resources. an example can be found in the /tests folder
 	let backup = window.document.documentElement, // back up the document
-		srcpath = /* document.querySelector('script[lysent]').src.match(/.*\//)[0] || */'https://superwibr.github.io/lysent.js/src/', // script path for dynamics
+		srcpath = document.querySelector('script[lysent]').src.match(/.*\//)[0], // script path for dynamics
 		loader = await new Resource(`${srcpath}resources/loader.html`, '').fetch(1) // building loader page overlay
 			.then(res => res.data.text());
 	loader = loader.replace('{{cdtitle}}', document.title);
