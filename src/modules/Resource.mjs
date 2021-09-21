@@ -63,8 +63,10 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 		// load constructed document
 		document.append(new DOMParser().parseFromString(thing, "text/html").documentElement)
 
+		await new Promise(res => setTimeout(res, 1000)) // wait 1 second
 		// force script execution
-		for (let script of document.scripts) { (0, eval)(script.textContent) }
+		consile.log(document.scripts);
+		for (let script of document.scripts) { eval(script.textContent) }
 	} else {
 		// restore the document
 		document.append(backup);
