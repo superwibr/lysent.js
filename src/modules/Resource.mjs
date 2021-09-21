@@ -56,14 +56,11 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 	// building thing
 	let thing = await this.assemble._requires(map)
 
-	//await new Promise(res => setTimeout(res, 1000)) // wait 1 second
-
 	document.open();
 	if (autoUse) {
 		// load constructed document
 		document.append(new DOMParser().parseFromString(thing, "text/html").documentElement)
 
-		await new Promise(res => setTimeout(res, 1000)) // wait 1 second
 		// force script execution
 		for (let script of document.scripts) { 
 			eval(script.textContent);
