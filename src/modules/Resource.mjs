@@ -81,7 +81,7 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 Resource.assemble._requires = async function (map) { // requires down the tree
 	let main = await map.resource.fetch() // get the main
 
-	if (main.data.type.startsWith("text/") || main.data.type == 'application/javascript') { // interpret as text or binary data.
+	if (main.data.type.startsWith("text/") || main.data.type.startsWith('application/javascript')) { // interpret as text or binary data.
 		main = await main.data.text()
 	} else {
 		main = await (new Promise((res, rej) => {
