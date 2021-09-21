@@ -69,7 +69,7 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 		// restore the document
 		document.append(backup);
 	}
-	document.close()
+	//document.close()
 
 	return new DOMParser().parseFromString(thing, "text/html").documentElement
 }
