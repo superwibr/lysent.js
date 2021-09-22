@@ -76,7 +76,7 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 
 
 Resource.assemble._requires = async function (map) { // requires down the tree
-	let main = await map.resource.fetch() // get the main
+	let main = await new Resource(map.res, map?.tag).fetch() // get the main
 
 	if (main.data.type.startsWith("text/") || main.data.type.startsWith('application/javascript')) { // interpret as text or binary data.
 		main = await main.data.text()
@@ -88,9 +88,9 @@ Resource.assemble._requires = async function (map) { // requires down the tree
 		}));
 	}
 
-	if (!map.require) return main
+	if (!map.req) return main
 
-	for (const [key, val] of Object.entries(map.require)) {
+	for (const [key, val] of Object.entries(map.req)) {
 		console.log(`filling '${key}'`)
 		main = main.replaceAll(
 			`{{${key}}}`,
