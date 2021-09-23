@@ -71,6 +71,9 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 	}
 	document.close()
 
+	// for safari: removes the second document element that gets loaded for some reason
+	document.querySelectorAll('html')[1].remove()
+
 	return new DOMParser().parseFromString(thing, "text/html").documentElement
 }
 
