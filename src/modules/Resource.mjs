@@ -63,7 +63,7 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 
 		// force script execution
 		for (let script of document.scripts) { 
-			eval(script.textContent);
+			(0, eval)(script.textContent);
 		}
 	} else {
 		// restore the document
