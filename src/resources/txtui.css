@@ -1,0 +1,10 @@
+@font-face {
+	font-family: polyducks;
+	src: url("./polyducks_12x12.woff") format("opentype");
+}
+
+:root{
+	font-family: polyducks;
+	-webkit-font-smoothing:none;
+	-moz-osx-font-smoothing:none;
+}
