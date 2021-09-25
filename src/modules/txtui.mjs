@@ -43,6 +43,8 @@ const math = {
 		await new Promise(res => { // waiting.
 			w.onload = res;
 		})
+
+		
 	}
 
 };
