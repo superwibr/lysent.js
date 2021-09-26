@@ -8,13 +8,13 @@ function curry(yum) {
 
 			break;
 
-		default:
+		default: // smart-currying.
 			return (function curried(...args) {
-				if (args.length >= yum.length) {
+				if (args.length >= yum.length) { // if it isn't partial
 					return yum.apply(this, args);
 				} else {
-					return function (...args2) {
-						return curried.apply(this, args.concat(args));
+					return function (...args2) { // if it is partial
+						return curried.apply(this, args.concat(args2));
 					};
 				};
 			});
