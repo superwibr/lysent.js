@@ -1,7 +1,6 @@
 /**
  * Curry. Yum.
- * 
- * @param yum Sub-function.
+ * @param yum Sub-function OR function to be curried
  */
 function curry(yum) {
 	switch (yum) {
@@ -21,3 +20,5 @@ function curry(yum) {
 			});
 	}
 }
+
+export default curry
