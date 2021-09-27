@@ -62,7 +62,7 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 		document.append(new DOMParser().parseFromString(thing, "text/html").documentElement)
 
 		// force script execution
-		for (let script of document.scripts) { 
+		for (let script of document.scripts) {
 			(0, eval)(script.textContent);
 		}
 	} else {
@@ -71,8 +71,10 @@ Resource.assemble = async function (map, autoUse) {// creates a single document 
 	}
 	document.close()
 
-	// for safari: removes the second document element that gets loaded for some reason
-	document.querySelectorAll('html')[1].remove()
+	try {
+		// for safari: removes the second document element that gets loaded for some reason
+		document.querySelectorAll('html')[1].remove()
+	} catch (error) {}
 
 	return new DOMParser().parseFromString(thing, "text/html").documentElement
 }

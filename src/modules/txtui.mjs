@@ -1,3 +1,7 @@
+import Resource from './Resource.mjs'
+
+const srcpath = document.querySelector('script[lysent]').src.match(/.*\//)[0];
+
 const math = {
 	/**
 	 * Does math and fixes
@@ -54,7 +58,7 @@ const math = {
 
 		w.close(); // close measuring window
 
-		win.resizeBy(ox, oy); // resize main window
+		await win.resizeBy(ox, oy); // resize main window
 
 		// even out out
 		if (win.innerWidth % 2 != 0) win.resizeBy(1, 0);
@@ -77,6 +81,10 @@ class Txtui {
 		});
 
 		math.windowFix(this.window, this.measures.wip, this.measures.hip);
+	}
+
+	async draw(mode, filePath) {
+		let txt = new Resource(filePath, '').fetch(1);
 	}
 }
 
