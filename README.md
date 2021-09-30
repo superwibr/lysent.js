@@ -5,5 +5,5 @@ Lysent JS implementation library.
 Sub-libs:
 
 - `lysent.Resource` : Builds documemnts from maps. An example can be found in `/tests`.
-- `lysent.txtui` : Tool for making terminal-style interfaces. Telnet sites over HTTP, if you will. [COMING SOON]
+- `lysent.txtui` : Tool for making terminal-style interfaces. Telnet sites over HTTP, if you will. [COMING NOT SO SOON]
 - `lysent.curry` : Mmmm, the English national dish :) [COMING SOON]

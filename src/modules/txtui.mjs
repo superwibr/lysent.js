@@ -12,10 +12,10 @@ const math = {
 	 */
 	pixelFix(wic, hic, wip, hip) {
 
-		if (wip < 100 || hip < 100) {// stop if the pixel measures are too small
-			console.error(`[LysentJS] txtui error: minimum window size is 100*100px!`);
-			return null;
-		}
+		// if (wip < 100 || hip < 100) {// stop if the pixel measures are too small
+		// 	console.error(`[LysentJS] txtui error: minimum window size is 100*100px!`);
+		// 	return null;
+		// }
 		if ((wip / wic < 12) || (hip / hic < 12)) {// stop if character size is less than 12px
 			console.error(`[LysentJS] txtui error: minimum character size is 12*12px, ended up with ${wip / wic}*${hip / hic}px!`);
 			return null;
@@ -69,23 +69,73 @@ const math = {
 };
 
 class Txtui {
-	constructor(wic, hic, wip, hip) {
-		this._init(wic, hic, wip, hip);
-	}
-	async _init(wic, hic, wip, hip) {
-		this.measures = math.pixelFix(wic, hic, wip, hip);
-		this.window = window.open('', '', `width=${this.measures.wip},height=${this.measures.hip}`);
+	constructor(correction, wic, hic, wip, hip) {
+		if (correction) {
+			this.measures = math.pixelFix(wic, hic, wip, hip);
+		};
+	};
+
+	init(percent) {
+		let units = percent
+			? '%'
+			: 'px'
+		let doc = new DOMParser().parseFromString(`
+			<html>
+				<head>
+				<link rel="stylesheet" href="${srcpath + '/resources/txtui.css'}" />
+					<style>
+						body {
+							background: black;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+						}
+						main {
+							background-color: #171717;
+							color: #FAFAFA;
+							width: ${this.measures.wip}${units};
+							height: ${this.measures.hip}${units}};
+						}
+					</style>
+				</head>
+				<body>
+					<main></main>
+				</body>
+			</html>
+		`, 'text/html').documentElement;
+
+		document.querySelector('html').remove(); // remove old document
+
+		document.append(doc); // add new one
+	};
+
+	async init_floating() {
+		this.window = window.open('', '', `width=${this.measures.wip},height=${this.measures.hip}`); // make window
 
 		await new Promise(res => { // wait for window to load
 			window.onload = res;
 		});
 
-		math.windowFix(this.window, this.measures.wip, this.measures.hip);
-	}
+		math.windowFix(this.window, this.measures.wip, this.measures.hip); // fix window
 
-	async draw(mode, filePath) {
-		let txt = new Resource(filePath, '').fetch(1);
-	}
+		delete this.init
+	};
+
+	draw(mode, text) {
+		switch (mode) {
+			case 'art':
+				text = text.replaceAll(' ', '&nbsp;');
+				break;
+
+			default: break;
+		}
+
+		text = text.replaceAll('\n', '<br/>')
+
+		let doc = document.querySelector('main');
+
+		doc.innerHTML = doc.innerHTML + text;
+	};
 }
 
 export default Txtui
