@@ -1,10 +1,11 @@
-import Resource from './Resource.mjs'
+
 
 const srcpath = document.querySelector('script[lysent]').src.match(/.*\//)[0];
 
 const math = {
 	/**
 	 * Does math and fixes
+	 * @deprecated
 	 * @param wic Width In Characters
 	 * @param hic Height In Characters
 	 * @param wip Width In Pixels
@@ -40,6 +41,12 @@ const math = {
 
 		return { cps, wip, hip };
 	},
+	/**
+	 * @deprecated
+	 * @param win 
+	 * @param wip 
+	 * @param hip 
+	 */
 	async windowFix(win, wip, hip) {
 		let y = btoa(`<style>html{ width:${wip}px; height:${hip}px;}</style>`),
 			w = window.open(y, '_blank', `width=${wip},height=${hip}`);
@@ -64,62 +71,28 @@ const math = {
 		if (win.innerWidth % 2 != 0) win.resizeBy(1, 0);
 		if (win.innerHeight % 2 != 0) win.resizeBy(0, 1);
 
+	},
+
+	frameFitFix(container, wic, hic) {
+		let c = {
+			w: container.clientWidth,
+			h: container.clientHeight
+		};
 	}
 
 };
 
 class Txtui {
-	constructor(correction, wic, hic, wip, hip) {
-		if (correction) {
-			this.measures = math.pixelFix(wic, hic, wip, hip);
-		};
+	constructor(query, wic, hic) {
+		this.container = document.querySelector(query);
+		this.measures = math.frameFitFix(this.container, wic, hic);
+
+		// add things to the document
+		document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="${srcpath}resources/txtui.css" />`); // styles
+		this.container.insertAdjacentHTML('beforeend', `<pre class="lys-txtui"></pre>`); // renderer zone
 	};
 
-	init(percent) {
-		let units = percent
-			? '%'
-			: 'px'
-		let doc = new DOMParser().parseFromString(`
-			<html>
-				<head>
-				<link rel="stylesheet" href="${srcpath + '/resources/txtui.css'}" />
-					<style>
-						body {
-							background: black;
-							display: flex;
-							justify-content: center;
-							align-items: center;
-						}
-						main {
-							background-color: #171717;
-							color: #FAFAFA;
-							width: ${this.measures.wip}${units};
-							height: ${this.measures.hip}${units}};
-						}
-					</style>
-				</head>
-				<body>
-					<main></main>
-				</body>
-			</html>
-		`, 'text/html').documentElement;
-
-		document.querySelector('html').remove(); // remove old document
-
-		document.append(doc); // add new one
-	};
-
-	async init_floating() {
-		this.window = window.open('', '', `width=${this.measures.wip},height=${this.measures.hip}`); // make window
-
-		await new Promise(res => { // wait for window to load
-			window.onload = res;
-		});
-
-		math.windowFix(this.window, this.measures.wip, this.measures.hip); // fix window
-
-		delete this.init
-	};
+	__append(text) { this.container.innerHTML = this.container.innerHTML + text }
 
 	draw(mode, text) {
 		switch (mode) {
@@ -132,9 +105,7 @@ class Txtui {
 
 		text = text.replaceAll('\n', '<br/>')
 
-		let doc = document.querySelector('main');
-
-		doc.innerHTML = doc.innerHTML + text;
+		this.__append(text)
 	};
 }
 

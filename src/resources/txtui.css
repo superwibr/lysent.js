@@ -3,14 +3,15 @@
 	src: url("./polyducks_12x12.woff") format("opentype");
 }
 
-:root{
-	font-family: polyducks;
-	-webkit-font-smoothing:none;
-	-moz-osx-font-smoothing:none;
-}
+.lys-txtui{
+	width: 100%;
+	height: 100%;
+	margin: 0;
 
-body {
+	font-family: polyducks;
 	background-color: #171717;
 	color: #FAFFFA;
 	font-size: 12px;
+	/* -webkit-font-smoothing:none;
+	-moz-osx-font-smoothing:none; */
 }
