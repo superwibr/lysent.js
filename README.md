@@ -7,3 +7,4 @@ Sub-libs:
 - `lysent.Resource` : Builds documemnts from maps. An example can be found in `/tests`.
 - `lysent.txtui` : Tool for making terminal-style interfaces. Telnet sites over HTTP, if you will. [COMING NOT SO SOON]
 - `lysent.curry` : Mmmm, the English national dish :) [COMING SOON]
+- `lysent.math` : Mathy things. Mostly focused on prime number fun. [COMING SOON]

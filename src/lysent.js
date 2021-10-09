@@ -6,6 +6,7 @@
 
 // imports
 import curry from './modules/curry.mjs';
+import math from './modules/math.mjs';
 import Resource from './modules/Resource.mjs'
 import Txtui from './modules/txtui.mjs';
 
@@ -65,7 +66,8 @@ window.lysent = (function () {// a nice IIFE to contain everything in context an
 
     lysent.Resource = Resource;
     lysent.Txtui = Txtui;
-    lysent.curry = curry
+    lysent.curry = curry;
+    lysent.math = math;
 
     // wrap main
     main = wrap(main);
@@ -78,5 +80,6 @@ window.lysent = (function () {// a nice IIFE to contain everything in context an
     // return methods
     return main;
 })();
+window.lys = window.lysent // shorthand
 
 export default window.lysent
