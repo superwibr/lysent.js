@@ -3,11 +3,8 @@
  * @param yum Sub-function OR function to be curried
  */
 function curry(yum) {
-
-	if (yum == '') {
-
-	} else { // smart-currying
-		return function curried(...args) {
+	const m = {
+		smartCurry: function curried(...args) { // smart-currying
 			if (args.length >= yum.length) { // if it isn't partial
 				return yum.apply(this, args);
 			} else {
@@ -15,7 +12,13 @@ function curry(yum) {
 					return curried.apply(this, args.concat(args2));
 				};
 			};
-		};
+		}
+	}
+
+	if (yum == '') {
+
+	} else { 
+		return m.smartCurry;
 	}
 }
 

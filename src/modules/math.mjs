@@ -6,25 +6,32 @@ const math = (function () {
 
 	/**
 	 * implementation of the [Sieve of Eratostenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)
-	 * @param max The upper limit for the Sieve
-	 * @returns the generated Sieve
+	 * @param max The upper limit for the Sieve. if `min` is defined, gets bumbped to `min + max`.
+	 * @param min The lower limit for the Sieve. If left undefined, starts at 2.
+	 * @returns An array of prime numbers
 	 */
-	methods.primes.GenerateSieve = function (max) {
-		const is_prime = new Array(max + 1); // make an array of `max+1` length
+	methods.primes.GenerateSieve = function (max, min = 0) {
+		const is_prime = new Object(); // object to hold values
 
-		for (let i = 2; i <= max; i++) { // fill in that array
+		max = min + max;
+
+		let p = (!min)
+			? 2
+			: min; // start at end of previous array if continuing
+
+		for (let i = p; i <= max; i++) { // fill in that array
 			is_prime[i] = true;
 		}
 
-
-		for (let i = 2; i <= max; i++) {// cross out multiplies
-			if (is_prime[i]) { // elliminate multiples of primes
+		for (let i = 2; i <= max; i++) { // cross out multiplies
+			if (is_prime[i] || is_prime[i] == undefined) { // elliminate multiples of primes
 				for (let j = i * 2; j <= max; j += i) {
-					is_prime[j] = false;
+					delete is_prime[j];
 				}
 			}
 		}
-		return is_prime;
+
+		return Object.keys(is_prime).map(str => parseInt(str, 10));
 	}
 
 	/**
@@ -38,7 +45,7 @@ const math = (function () {
 	methods.primes.primeFactors = function primeFactors(number, result) {
 		number = BigInt(number); // conversion
 
-		result = (result || []);
+		result = (result || []); // if not continuing the factors, reset.
 
 		let root = methods.sqrt(number),
 			x = 2n;
@@ -59,32 +66,73 @@ const math = (function () {
 	};
 
 	/**
-	 * Gets the square root. Designed so we can handle `BigInt`s
-	 * @param value the value to get the root of
-	 * @returns the square root of `value`
+	 * Generates `n` amount of prime numbers and returns them in an array.
+	 * @returns Array of prime numbers
+	 * 
+	 * @param verbose Optional, shows progress in console if set to a truthy value
+	 * @param jumps Optional, changes the chunk/jump size.
 	 */
-	methods.sqrt = function (value) {
+	methods.primes.getPrimes = function (n, verbose, jumps) {
+		let genned = [],
+			min = 0,
+			max = jumps || 2 ** 17;
 
-		value = BigInt(value) // convert to Big Int
+		while (genned.length < n) {
+			genned.push(...math.primes.GenerateSieve(max, min)); // generate primes
 
-		if (value < 0n) { // errorination because yes
-			throw 'square root of negative numbers is not supported'
+			if (genned.length >= n) break; // catch if enough primes
+
+			min += jumps || 2 ** 17; // otherwise, search the next 1000 numbers for primes
+
+			verbose ? console.log(`Completed: ${Math.round((genned.length / n) * 100)}% (${genned.length} of ${n} primes)`) : 0;
 		}
 
-		if (value < 2n) {
-			return value;
-		}
-
-		function newtonIteration(n, x0) { // even I don't understand this
-			const x1 = ((n / x0) + x0) >> 1n;
-			if (x0 === x1 || x0 === (x1 - 1n)) {
-				return x0;
-			}
-			return newtonIteration(n, x1);
-		}
-
-		return newtonIteration(value, 1n);
+		return genned.slice(0, n);
 	}
+
+	/* doesn't work :/
+	
+	methods.primes.factorEncode = function (number) {
+		let digits = Array.from(String(number), Number),
+			primes = math.primes.getPrimes(digits.length),
+			out = '';
+
+		for (let i = 0; i < digits.length; i++) {
+			out += String(primes[i] ** digits[i])
+		}
+
+		return out
+	}
+
+	methods.primes.factorDecode =*/
+
+		/**
+		 * Gets the square root. Designed so we can handle `BigInt`s
+		 * @param value the value to get the root of
+		 * @returns the square root of `value`
+		 */
+		methods.sqrt = function (value) {
+
+			value = BigInt(value) // convert to Big Int
+
+			if (value < 0n) { // errorination because yes
+				throw 'square root of negative numbers is not supported'
+			}
+
+			if (value < 2n) {
+				return value;
+			}
+
+			function newtonIteration(n, x0) { // even I don't understand this
+				const x1 = ((n / x0) + x0) >> 1n;
+				if (x0 === x1 || x0 === (x1 - 1n)) {
+					return x0;
+				}
+				return newtonIteration(n, x1);
+			}
+
+			return newtonIteration(value, 1n);
+		}
 
 	/**
 	 * Converts an array of multiplied values (like the result of `math.primeFactors`) into their exponential form
@@ -98,7 +146,7 @@ const math = (function () {
 			},
 			out = new Object(); // output object
 
-		for(const value of uniques){ // for every unique value, find exponent
+		for (const value of uniques) { // for every unique value, find exponent
 			out[value] = {
 				base: value,
 				exponent: getOccurrence(arr, value)
