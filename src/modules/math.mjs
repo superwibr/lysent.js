@@ -157,7 +157,6 @@ const math = (function () {
 	}
 
 
-	// return methods
 	return methods
 })();
 
