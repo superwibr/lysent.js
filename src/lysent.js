@@ -9,6 +9,7 @@ import curry from './modules/curry.mjs';
 import math from './modules/math.mjs';
 import Resource from './modules/Resource.mjs'
 import Txtui from './modules/txtui.mjs';
+import rose from './ROSE/index.mjs';
 
 /*
  * Notes:
@@ -64,10 +65,16 @@ window.lysent = (function () {// a nice IIFE to contain everything in context an
         return input;
     });
 
+    // scriptPath getter
+    lysent.SRCPATH = function(){
+        return document.querySelector('script[lysent]').src.match(/.*\//)[0];
+    }
+
     lysent.Resource = Resource;
     lysent.Txtui = Txtui;
     lysent.curry = curry;
     lysent.math = math;
+    lysent.rose = rose;
 
     // wrap main
     main = wrap(main);
