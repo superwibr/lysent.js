@@ -10,6 +10,7 @@ import math from './modules/math.mjs';
 import Resource from './modules/Resource.mjs'
 import Txtui from './modules/txtui.mjs';
 import rose from './ROSE/index.mjs';
+import docman from './modules/docman.mjs'
 
 /*
  * Notes:
