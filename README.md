@@ -9,3 +9,4 @@ Sub-libs:
 - `lysent.curry` : Mmmm, the English national dish :) [COMING SOON]
 - `lysent.math` : Mathy things.
 - `lysent.rose` : The future is [here](./ROSE.md)!
+- `lysent.docman` : document utilities to eventually replace lysent Resource.
