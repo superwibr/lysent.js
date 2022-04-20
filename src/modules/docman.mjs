@@ -31,3 +31,5 @@ const docman = {
         return await this.swap(doc);
     }
 }
+
+export default docman
